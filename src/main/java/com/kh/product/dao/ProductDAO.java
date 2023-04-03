@@ -13,8 +13,16 @@ public interface ProductDAO {
 
   int delete(Long pid);
 
+  int deleteParts(List<Long> pids);
+
+  int deleteAll();
+
   Optional<Product> findById(Long pid);
 
   List<Product> findAll();
+
+  boolean isExist(Long pid);
+
+  int countOfRecord();
 
 }

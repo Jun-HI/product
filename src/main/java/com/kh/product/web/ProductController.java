@@ -157,5 +157,15 @@ public class ProductController {
     return "product/all";
 
   }
+@PostMapping("/items/del")
+  public String deleteParts(@RequestParam("chk") List<Long> pids){
+    log.info("pids={}", pids);
+    if(pids.size() > 0){
+      productSVC.deleteParts(pids);
+    }else{
+      return "product/all";
+    }
+    return "redirect:/products";
+}
 
 }

@@ -13,7 +13,11 @@ public interface ProductSVC {
 
   int delete(Long pid);
 
+  int deleteParts(List<Long> pids);
+
   Optional<Product> findById(Long pid);
 
   List<Product> findAll();
+
+  boolean isExist(Long pid);
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -68,6 +69,21 @@ public class productDAOImpl implements ProductDAO{
   }
 
   @Override
+  public int deleteParts(List<Long> pids) {
+    String sql = "delete from product where pid in ( :ids) ";
+    Map<String, List<Long>> param = Map.of("ids",pids);
+    return template.update(sql,param);
+  }
+
+  @Override
+  public int deleteAll(){
+    String sql = "delete from product ";
+    Map<String,String> param = new LinkedHashMap<>();
+    int deletedRowCnt = template.update(sql, param);
+    return deletedRowCnt;
+  }
+
+  @Override
   public Optional<Product> findById(Long pid) {
   StringBuffer sb = new StringBuffer();
   sb.append("select pid, pname, quantity, price ");
@@ -96,6 +112,29 @@ public class productDAOImpl implements ProductDAO{
   );
     return list;
   }
+
+
+
+  @Override
+  public boolean isExist(Long pid) {
+    boolean isExist = false;
+    String sql = "select count(*) from product where pid = :pid";
+
+    Map<String,Long> param = Map.of("pid",pid);
+    Integer integer = template.queryForObject(sql, param, Integer.class);
+    isExist = (integer > 0) ? true : false;
+    return isExist;
+  }
+
+  @Override
+  public int countOfRecord() {
+    String sql = "select count(*) from product ";
+    Map<String,String> param = new LinkedHashMap<>();
+    Integer rows = template.queryForObject(sql, param, Integer.class);
+    return rows;
+  }
+
+
 
   class RowMapperImpl implements RowMapper<Product> {
 
